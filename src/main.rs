@@ -1,10 +1,10 @@
 extern crate rustbox;
 
-use std::collections::HashSet;
-use std::iter::Enumerate;
-use std::slice::Iter;
-
 use rustbox::{Color, Event, Key, RustBox, Style};
+
+use level::*;
+
+mod level;
 
 const WALL_CELL: Cell = Cell {
     ch: '#',
@@ -48,130 +48,6 @@ struct Cell {
     style: Style,
     fg: Color,
     bg: Color,
-}
-
-#[derive(Clone, Copy, Debug, PartialEq)]
-enum Tile {
-    Floor,
-    Goal,
-    Wall,
-}
-
-#[derive(Debug)]
-struct Map {
-    tiles: Vec<Tile>,
-    width: usize,
-    height: usize,
-}
-
-impl Map {
-    fn iter_tiles(&self) -> TileIterator {
-        TileIterator {
-            inner: self.tiles.iter().enumerate(),
-            width: self.width,
-            height: self.height,
-        }
-    }
-
-    fn get_tile(&self, x: usize, y: usize) -> Tile {
-        let i = (y * self.width) + x;
-        self.tiles[i]
-    }
-}
-
-struct TileIterator<'a> {
-    inner: Enumerate<Iter<'a, Tile>>,
-    width: usize,
-    height: usize,
-}
-
-impl<'a> Iterator for TileIterator<'a> {
-    type Item = (Tile, usize, usize);
-
-    fn next(&mut self) -> Option<Self::Item> {
-        let tile = self.inner.next();
-        tile.map(|(i, tile)| {
-            let (x, y) = (i % self.width, i / self.width);
-            (*tile, x, y)
-        })
-    }
-}
-
-#[derive(Debug)]
-struct World {
-    map: Map,
-    boxes: HashSet<(usize, usize)>,
-    player_pos: (usize, usize),
-}
-
-impl World {
-    fn new() -> Self {
-        use Tile::*;
-
-        let mut boxes = HashSet::new();
-
-        /*
-         * #####
-         * #@$.#
-         * #####
-         */
-        //let player_pos = (1, 1);
-        //boxes.insert((2, 1));
-        //let tiles = vec![
-        //    Wall, Wall, Wall, Wall, Wall,
-        //    Wall, Floor, Floor, Floor, Wall,
-        //    Wall, Wall, Wall, Wall, Wall,
-        //];
-        //let width = 5;
-        //let height = 3;
-
-        /*
-         * #######
-         * #.@ # #
-         * #$* $ #
-         * #   $ #
-         * # ..  #
-         * #  *  #
-         * #######
-         */
-        let player_pos = (2, 1);
-        boxes.insert((1, 2));
-        boxes.insert((2, 2));
-        boxes.insert((4, 2));
-        boxes.insert((4, 3));
-        boxes.insert((3, 5));
-        let tiles = vec![
-            Wall, Wall, Wall, Wall, Wall, Wall, Wall,
-            Wall, Goal, Floor, Floor, Wall, Floor, Wall,
-            Wall, Floor, Goal, Floor, Floor, Floor, Wall,
-            Wall, Floor, Floor, Floor, Floor, Floor, Wall,
-            Wall, Floor, Goal, Goal, Floor, Floor, Wall,
-            Wall, Floor, Floor, Goal, Floor, Floor, Wall,
-            Wall, Wall, Wall, Wall, Wall, Wall, Wall,
-        ];
-        let width = 7;
-        let height = 7;
-
-        let map = Map {
-            tiles,
-            width,
-            height,
-        };
-
-        World {
-            map,
-            boxes,
-            player_pos,
-        }
-    }
-
-    fn iter_tiles(&self) -> TileIterator {
-        self.map.iter_tiles()
-    }
-
-    fn get_tile(&self, x: usize, y: usize) -> Tile {
-        self.map.get_tile(x, y)
-    }
 }
 
 #[derive(Clone, Copy, Debug, PartialEq)]
