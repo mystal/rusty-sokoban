@@ -188,7 +188,7 @@ impl Game {
             let (draw_x, draw_y) = (x + self.map_pos.0, y + self.map_pos.1);
             match tile {
                 // Floor tiles are left empty.
-                Tile::Floor => {},
+                Tile::Floor | Tile::Empty => {},
                 Tile::Wall => self.rb.print_char(draw_x, draw_y, WALL_CELL.style, WALL_CELL.fg, WALL_CELL.bg, WALL_CELL.ch),
                 Tile::Goal => self.rb.print_char(draw_x, draw_y, GOAL_CELL.style, GOAL_CELL.fg, GOAL_CELL.bg, GOAL_CELL.ch),
             }

@@ -4,6 +4,7 @@ use std::slice::Iter;
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub enum Tile {
+    Empty,
     Floor,
     Goal,
     Wall,
