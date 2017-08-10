@@ -59,7 +59,7 @@ pub struct World {
 
 impl World {
     pub fn new() -> Self {
-        use Tile::*;
+        use self::Tile::*;
 
         let mut boxes = HashSet::new();
 

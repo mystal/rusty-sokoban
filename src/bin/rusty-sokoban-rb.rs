@@ -1,10 +1,9 @@
 extern crate rustbox;
+extern crate rusty_sokoban;
 
 use rustbox::{Color, Event, Key, RustBox, Style};
 
-use level::*;
-
-mod level;
+use rusty_sokoban::level::*;
 
 const WALL_CELL: Cell = Cell {
     ch: '#',
